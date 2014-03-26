@@ -1,0 +1,14 @@
+{
+  "name": "ios2android",
+  "main": "index.html",
+  "window": {
+    "toolbar": true,
+    "width": 500,
+    "height": 200,
+    "frame": true
+  },
+  "dependencies": {
+    "mkdirp": "~0.3.5",
+    "morph": "~0.2.0"
+  }
+}
