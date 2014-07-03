@@ -1,0 +1,9 @@
+.idea/
+node_modules/
+
+*.dll
+*.exe
+*.pak
+*.app
+
+credits.html
