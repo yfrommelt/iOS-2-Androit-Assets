@@ -7,7 +7,7 @@ var im = require('imagemagick');
 window.ondragover = window.ondrop = function(e) {
 	e.preventDefault();
 	return false;
-}
+};
 
 var dropZone = document.querySelector('#drop');
 
@@ -15,19 +15,19 @@ dropZone.ondragover = function(e) {
 	this.className = "hover";
 	this.innerHTML = "Drop the files";
 	return false;
-}
+};
 
 dropZone.ondragleave = function(e) {
 	this.className = "";
 	this.innerHTML = "Drop your iOS assets here";
 	return false;
-}
+};
 
 var density = {
-	'ldip' : 0.25,
-	'mdip' : 0.5,
-	'hdip' : 0.75,
-	'xhdip' : 1
+	'mdip' : 50,
+	'hdip' : 75,
+	'xhdip' : 112.5,
+	'xxhdip' : 150,
 };
 
 dropZone.ondrop = function(e) {
@@ -66,28 +66,4 @@ dropZone.ondrop = function(e) {
 		this.className = "";
 		dropZone.innerHTML = "Travail terminé";
 	}
-}
-
-function copyFile (source, target, cb) {
-	var cbCalled = false;
-
-	var rd = fs.createReadStream(source);
-	rd.on("error", function(err) {
-		done(err);
-	});
-	var wr = fs.createWriteStream(target);
-	wr.on("error", function(err) {
-		done(err);
-	});
-	wr.on("close", function(ex) {
-		done();
-	});
-	rd.pipe(wr);
-
-	function done(err) {
-		if (!cbCalled) {
-			cb(err);
-			cbCalled = true;
-		}
-	}
-}
+};
