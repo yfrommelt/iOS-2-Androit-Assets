@@ -26,8 +26,8 @@ dropZone.ondragleave = function(e) {
 var density = {
 	'mdip' : 50,
 	'hdip' : 75,
-	'xhdip' : 112.5,
-	'xxhdip' : 150,
+	'xhdip' : 100,
+	'xxhdip' : 112.5,
 };
 
 dropZone.ondrop = function(e) {
