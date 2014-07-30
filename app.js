@@ -52,7 +52,7 @@ dropZone.ondrop = function(e) {
 				var target_dirname = source_dirname + path.sep + 'drawable-' + resolution;
 				var target_file = target_dirname + path.sep + target_basename + source_extension;
 
-				im.convert([source_file, '-resize', (density[resolution]*100)+'%', target_file], function(err, stdout) {
+				im.convert([source_file, '-resize', (density[resolution])+'%', target_file], function(err, stdout) {
 					if (err) throw err;
 					// converted++;
 					// if (converted == (Object.keys(density).length * nb_files)) {
