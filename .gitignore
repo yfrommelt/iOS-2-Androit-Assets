@@ -5,5 +5,8 @@ node_modules/
 *.exe
 *.pak
 *.app
+nwsnapshot
+npm-debug.log
+demo/
 
 credits.html

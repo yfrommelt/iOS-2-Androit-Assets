@@ -1,8 +1,7 @@
 var morph = require('morph')
 var mkdirp = require('mkdirp');
 var path = require('path');
-var fs = require('fs');
-var im = require('imagemagick');
+var lwip = require('lwip');
 
 window.ondragover = window.ondrop = function(e) {
 	e.preventDefault();
@@ -58,43 +57,57 @@ dropZone.ondrop = function(e) {
 		return (a.name.match(reg)[1] < b.name.match(reg)[1]);
 	});
 
-	for (var i = 0; i < files.length; i++) {
-		var converted = 0;
-		var source_file = files[i].path;
-		var source_extension = path.extname(source_file);
-		var source_basename = path.basename(source_file, source_extension);
-		var target_basename = morph.toSnake(source_basename.replace(reg, ''));
+	for(var i = 0, l = files.length; i < l; i++) {
+		if (typeof files[i] == "object") {
 
-		var maches = source_basename.match(reg);
-		if (maches && maches.length > 0) {
-			console.log(maches[0]);
-			var ratio = (1/density[matching[maches[0]]]);
-			for (var resolution in density) {
+			var source_file = files[i].path;
+			var source_extension = path.extname(source_file);
+			var source_basename = path.basename(source_file, source_extension);
+			var target_basename = morph.toSnake(source_basename.replace(reg, ''));
 
-				var resize = ((density[resolution]*ratio)*100);
+			var maches = source_basename.match(reg);
+			if (maches && maches.length > 0) {
+				var ratio = (1/density[matching[maches[0]]]);
+				for (var resolution in density) {
 
-				var target_dirname = source_dirname + path.sep + 'drawable-' + resolution;
-				var target_file = target_dirname + path.sep + target_basename + source_extension;
+					var resize = (density[resolution] * ratio);
 
+					var target_dirname = source_dirname + path.sep + 'drawable-' + resolution;
+					var target_file = target_dirname + path.sep + target_basename + source_extension;
 
-				// console.log(target_file);
-				// console.log(files_complete.indexOf(target_file), resize, 100 > resize);
-				
-				if (-1 === files_complete.indexOf(target_file)
-					|| (-1 !== files_complete.indexOf(target_file) && 100 > resize)) {
+					// console.log(source_file, target_file);
+					
+					if (-1 === files_complete.indexOf(target_file)
+						|| (-1 !== files_complete.indexOf(target_file) && 1 > resize)) {
 
-					im.convert([source_file, '-resize', resize+'%', target_file], function(err, stdout) {
-						if (err) throw err;
-					});
+						resizeFile(source_file, target_file, resize);
+					}
+
+					files_complete.push(target_file);
 
 				}
-
-				files_complete.push(target_file);
-
 			}
 		}
-
-		this.className = '';
-		dropZone.innerHTML = 'Resize finished !';
+		
+		if (i == l-1) {
+			this.className = '';
+			dropZone.innerHTML = 'Resize finished !';
+		}
 	}
 };
+
+
+var resizeFile = function(from, to, ratio) {
+	lwip.open(from, function(err, image){
+		image.batch()
+		.scale(ratio)
+		.writeFile(to, function(err){
+			if (err) console.log(err);
+		});
+	});
+
+	// im.convert([from, '-resize', (ratio * 100)+'%', to], function(err, stdout) {
+	// 	console.log(err);
+	// });
+	// 
+}
